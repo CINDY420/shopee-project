@@ -1,0 +1,45 @@
+{
+  "name": "@infra/utils",
+  "version": "1.2.1",
+  "main": "dist/index.js",
+  "homepage": "https://git.garena.com/shopee/sz-devops/fe/kubernetes/utils",
+  "repository": "gitlab@git.garena.com:shopee/sz-devops/fe/kubernetes/utils.git",
+  "author": "Jiyao Hong <jiyao.hong@shopee.com>",
+  "license": "UNLICENSED",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "prepare": "husky install",
+    "lint": "eslint --fix src --ext=ts",
+    "build": "tsc --project tsconfig.build.json && tsc-alias && copyfiles README.md dist/",
+    "update:package": "infra-auto-release-update-package-version",
+    "release": "infra-auto-release-release",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@infra-web-kit/eslint-config-infra-typescript": "1.2.1",
+    "@infra/auto-release": "^1.1.1",
+    "@types/jest": "^28.1.4",
+    "@types/lodash": "^4.14.182",
+    "@types/mocha": "^9.1.1",
+    "@typescript-eslint/eslint-plugin": "^5.12.1",
+    "@typescript-eslint/parser": "^5.12.1",
+    "copyfiles": "^2.4.1",
+    "eslint": "^8.10.0",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-unused-imports": "^2.0.0",
+    "husky": "^8.0.1",
+    "jest": "^28.1.2",
+    "jest-environment-jsdom": "^28.1.2",
+    "prettier": "^2.6.2",
+    "rimraf": "^3.0.2",
+    "ts-jest": "^28.0.5",
+    "tsc-alias": "^1.6.6",
+    "typescript": "^4.6.3"
+  },
+  "dependencies": {
+    "lodash": "^4.17.21"
+  }
+}
