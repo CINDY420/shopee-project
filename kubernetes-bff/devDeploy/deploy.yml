@@ -1,0 +1,156 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: $APP_NAME-$ENVIRONMENT
+  namespace: $NAMESPACE
+  labels:
+    application: node-gateway
+    project: ske
+    group: Infrastructure-Team
+    cid: sg
+    env: $ENVIRONMENT
+spec:
+  replicas: $REPLICAS
+  revisionHistoryLimit: 1
+  minReadySeconds: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  selector:
+    matchLabels:
+      application: node-gateway
+      project: ske
+      group: Infrastructure-Team
+      cid: sg
+      env: $ENVIRONMENT
+  template:
+    metadata:
+      labels:
+        application: node-gateway
+        project: ske
+        group: Infrastructure-Team
+        cid: sg
+        env: $ENVIRONMENT
+        metrics: "true"
+    spec:
+      containers:
+        - image: $IMAGE_NAME
+          name: $APP_NAME-$ENVIRONMENT
+          ports:
+            - containerPort: $POD_PORT
+              name: http
+              protocol: TCP
+            - containerPort: $METRICS_PORT
+              name: metrics
+              protocol: TCP
+          readinessProbe:
+            tcpSocket:
+              port: $POD_PORT
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: $POD_PORT
+            initialDelaySeconds: 5
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: $CPU
+              memory: $MEMORY
+            limits:
+              cpu: $CPU
+              memory: $MEMORY
+          lifecycle:
+            preStop:
+              exec:
+                command: ["sh", "-c", "sleep 3"]
+            postStart:
+              exec:
+                command:
+                - sh
+                - -c
+                - |
+                  sh  <<EOF
+                  export LOGDIR=\$(echo \$DEM_KUBE_POD_NAME |awk -F '[-]' '{print \$(NF-1)\$(NF)}')
+                  mkdir -p /data/log/\$LOGDIR
+                  mkdir -p /usr/src/app/log
+                  rm -rf /usr/src/app/log
+                  ln -s /data/log/\$LOGDIR /usr/src/app/log
+                  EOF
+          env:
+          - name: DEBUGGER_IMAGE
+            value: $DEBUGGER_IMAGE
+          - name: NODE_ENV
+            value: $ENVIRONMENT
+          - name: DEM_KUBE_POD_NAME
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.name
+          volumeMounts:
+          - mountPath: /etc/ske-gateway-global/
+            readOnly: true
+            name: global-config
+          - mountPath: /etc/ske-bff-config/
+            readOnly: true
+            name: ske-bff-config
+          - mountPath: /data/log
+            name: log
+      serviceAccount: platform-crd
+      serviceAccountName: platform-crd
+      volumes:
+      - name: global-config
+        configMap:
+          name: ske-gateway-global-config
+      - name: ske-bff-config
+        configMap:
+          name: ske-bff-config
+      - name: log
+        hostPath:
+          path: /data/log/$APP_NAME-$ENVIRONMENT-sg
+          type: DirectoryOrCreate
+---
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+      app: $APP_NAME-$ENVIRONMENT
+  name: $APP_NAME-$ENVIRONMENT
+  namespace: $NAMESPACE
+spec:
+  ports:
+  - port: $POD_PORT
+    targetPort: $POD_PORT
+    name: web
+  - port: $METRICS_PORT
+    targetPort: $METRICS_PORT
+    name: metrics
+  selector:
+    application: node-gateway
+    project: ske
+    group: Infrastructure-Team
+    cid: sg
+    env: $ENVIRONMENT
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: $APP_NAME-$ENVIRONMENT
+  namespace: monitoring
+  labels:
+    app: $APP_NAME-$ENVIRONMENT
+spec:
+  namespaceSelector:
+    matchNames:
+      - $NAMESPACE
+  selector:
+    matchLabels:
+      application: node-gateway
+      project: ske
+      group: Infrastructure-Team
+      cid: sg
+      env: $ENVIRONMENT
+  endpoints:
+    - port: metrics

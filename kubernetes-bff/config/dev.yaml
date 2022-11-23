@@ -1,0 +1,44 @@
+http:
+  protocol: 'http'
+  host: 'localhost'
+  port: '3000'
+
+es:
+  protocol: 'http'
+  host: 'elasticsearch-ske-database.ske-database'
+  port: 9200
+
+agent:
+  protocol: 'http'
+  host: 'agent'
+  port: 5000
+
+metrics:
+  protocol: 'http'
+  host: 'metrics'
+  port: 8080
+
+mailer:
+  server: 'smtp.shopeemobile.com'
+  port: '587'
+
+auth:
+  protocol: 'http'
+  host: 'auth'
+  port: 8080
+
+openApi:
+  protocol: 'http'
+  host: 'open-api'
+  port: 8081
+
+apm:
+  serviceName: 'BFF'
+  protocol: 'http'
+  host: 'apm-server.ske-database'
+  port: 8200
+
+pipeline:
+  protocol: 'http'
+  host: 'pipeline.devops.i.test.sz.shopee.io'
+  prefix: 'api'

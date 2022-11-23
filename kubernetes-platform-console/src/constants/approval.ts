@@ -1,0 +1,12 @@
+export enum AUTH_TYPE {
+  TERMINAL = 'TERMINAL',
+  CHANGE_ROLE = 'CHANGE_ROLE',
+  ADD_ROLE = 'ADD_ROLE',
+  DEPLOYMENT_SCALE = 'DEPLOYMENT_SCALE'
+}
+
+export const TICKET_TITLE = {
+  [AUTH_TYPE.DEPLOYMENT_SCALE]: 'application'
+}
+
+export const TERMINAL_TYPE = 'TERMINAL'

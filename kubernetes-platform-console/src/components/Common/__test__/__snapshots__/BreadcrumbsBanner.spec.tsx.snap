@@ -1,0 +1,147 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BreadcrumbsBanner render UI result should display crumb text according to crumbResourceLookup configuration 1`] = `
+<div>
+  <div
+    class="sc-gsTCUz canLKZ"
+  >
+    <nav>
+      <div
+        class="ant-breadcrumb sc-bdfBwQ cJPoQN"
+      >
+        <span>
+          <span
+            class="ant-breadcrumb-link"
+          >
+            <div
+              class="sc-dlfnbm CZBcd"
+            >
+              <div
+                class="sc-hKgILt gqwVAe"
+              >
+                a
+              </div>
+            </div>
+          </span>
+          <span
+            class="ant-breadcrumb-separator"
+          >
+            /
+          </span>
+        </span>
+      </div>
+    </nav>
+  </div>
+</div>
+`;
+
+exports[`BreadcrumbsBanner render UI result should display crumb text with description as prefix according to crumbLookup configuration 1`] = `
+<div>
+  <div
+    class="sc-gsTCUz canLKZ"
+  >
+    <nav>
+      <div
+        class="ant-breadcrumb sc-bdfBwQ cJPoQN"
+      >
+        <span>
+          <span
+            class="ant-breadcrumb-link"
+          >
+            <div
+              class="sc-dlfnbm CZBcd"
+            >
+              <div
+                class="sc-hKgILt gqwVAe"
+              >
+                A:
+                a
+              </div>
+            </div>
+          </span>
+          <span
+            class="ant-breadcrumb-separator"
+          >
+            /
+          </span>
+        </span>
+      </div>
+    </nav>
+  </div>
+</div>
+`;
+
+exports[`BreadcrumbsBanner render UI result should render children crumb according to routeCrumbsTree configuration 1`] = `
+<div>
+  <div
+    class="sc-gsTCUz canLKZ"
+  >
+    <nav>
+      <div
+        class="ant-breadcrumb sc-bdfBwQ cJPoQN"
+      >
+        <span>
+          <span
+            class="ant-breadcrumb-link"
+          >
+            <div
+              class="sc-dlfnbm CZBcd"
+            >
+              <div
+                class="sc-hKgILt gqwVAe"
+              >
+                a
+              </div>
+            </div>
+          </span>
+          <span
+            class="ant-breadcrumb-separator"
+          >
+            /
+          </span>
+        </span>
+        <span>
+          <span
+            class="ant-breadcrumb-link"
+          >
+            <div
+              class="sc-dlfnbm CZBcd"
+            >
+              <div
+                class="sc-hKgILt gqwVAe"
+              >
+                b
+              </div>
+            </div>
+          </span>
+          <span
+            class="ant-breadcrumb-separator"
+          >
+            /
+          </span>
+        </span>
+        <span>
+          <span
+            class="ant-breadcrumb-link"
+          >
+            <div
+              class="sc-dlfnbm CZBcd"
+            >
+              <div
+                class="sc-hKgILt gqwVAe"
+              >
+                c
+              </div>
+            </div>
+          </span>
+          <span
+            class="ant-breadcrumb-separator"
+          >
+            /
+          </span>
+        </span>
+      </div>
+    </nav>
+  </div>
+</div>
+`;

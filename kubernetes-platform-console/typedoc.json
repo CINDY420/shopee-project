@@ -1,0 +1,14 @@
+{
+  "inputFiles": ["src/helpers", "src/hooks"],
+  "exclude": ["**/node_modules/**", "src/api", "src/assets", "src/common-styles", "src/components", "src/states", "src/swagger-api", "src/hooks/__tests__"],
+  "externalPattern": ["src/**/*.tsx"],
+  "excludeExternals": true,
+  "ignoreCompilerErrors": true,
+  "name": "kubernetes-platform-console",
+  "out": "docs",
+  "mode": "modules",
+  "plugin": ["typedoc-plugin-sourcefile-url", "typedoc-plugin-external-module-name"],
+  "theme": "./node_modules/typedoc-chd-theme/chd-theme",
+  "readme": "none",
+  "hideGenerator": true
+}

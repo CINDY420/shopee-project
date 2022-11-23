@@ -1,0 +1,37 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Loading render UI result should return DecoratedComponent when loading is false 1`] = `
+<div>
+  <div>
+    loading is false
+  </div>
+</div>
+`;
+
+exports[`Loading render UI result should return StyledSpin when loading is true 1`] = `
+<div>
+  <div
+    class="ant-spin ant-spin-spinning sc-bdfBwQ eYtIxx"
+  >
+    <span
+      aria-label="loading"
+      class="anticon anticon-loading anticon-spin ant-spin-dot"
+      role="img"
+    >
+      <svg
+        aria-hidden="true"
+        data-icon="loading"
+        fill="currentColor"
+        focusable="false"
+        height="1em"
+        viewBox="0 0 32 32"
+        width="1em"
+      >
+        <path
+          d="M19.02.8a15.4 15.4 0 017.94 4.24A15.45 15.45 0 0131.5 16a15.45 15.45 0 01-12.48 15.2 1.5 1.5 0 01-.58-2.94 12.39 12.39 0 006.4-3.42A12.45 12.45 0 0028.5 16 12.45 12.45 0 0018.44 3.74a1.5 1.5 0 01.38-2.97l.2.02z"
+        />
+      </svg>
+    </span>
+  </div>
+</div>
+`;

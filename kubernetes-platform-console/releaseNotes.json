@@ -1,0 +1,9 @@
+{
+  "version": "1.17.0",
+  "features": [
+    "Unified deploy resource into SDU.",
+    "SDUs deployed via all orchestrator (Leap and SZK8S) are visible in the same page."
+  ],
+  "bugfixes": [
+  ]
+}

@@ -1,0 +1,28 @@
+http:
+  protocol: 'http'
+  host: 'localhost'
+  port: '3000'
+
+es:
+  protocol: 'http'
+  host: 'localhost'
+  port: '9201'
+
+agent:
+  protocol: 'http'
+  host: 'ske-agent'
+  port: '5000'
+
+metrics:
+  protocol: 'http'
+  host: 'sc-metrics'
+  port: '8080'
+
+mailer:
+  server: 'smtp.shopeemobile.com'
+  port: '587'
+
+openApi:
+  protocol: 'http'
+  host: 'ske-open-api'
+  port: '8081'

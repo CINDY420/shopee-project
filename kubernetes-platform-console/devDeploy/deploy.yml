@@ -1,0 +1,88 @@
+#apiVersion: extensions/v1beta1
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: $APP_NAME-$ENVIRONMENT
+  namespace: $NAMESPACE
+  labels:
+    group: Infrastructure-Team
+    application: ske-console
+    project: ske
+    cid: sg
+    env: $ENVIRONMENT
+spec:
+  replicas: $REPLICAS
+  revisionHistoryLimit: 1
+  minReadySeconds: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  selector:
+    matchLabels:
+      group: Infrastructure-Team
+      application: ske-console
+      project: ske
+      cid: sg
+      env: $ENVIRONMENT
+  template:
+    metadata:
+      labels:
+        metrics: "true"
+        group: Infrastructure-Team
+        application: ske-console
+        project: ske
+        cid: sg
+        env: $ENVIRONMENT
+    spec:
+      tolerations:
+        - effect: NoSchedule
+          operator: Exists
+      containers:
+        - image: $IMAGE_NAME 
+          name: $APP_NAME-$ENVIRONMENT
+          ports:
+            - containerPort: $POD_PORT
+              name: http
+              protocol: TCP
+          readinessProbe:
+            tcpSocket:
+              port: $POD_PORT
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: $POD_PORT
+            initialDelaySeconds: 5
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: $CPU
+              memory: $MEMORY
+            limits:
+              cpu: $CPU
+              memory: $MEMORY
+          lifecycle:
+            preStop:
+              exec:
+                command: ["sh", "-c", "sleep 3"]
+---
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+      app: $APP_NAME-$ENVIRONMENT
+  name: $APP_NAME-$ENVIRONMENT
+  namespace: $NAMESPACE
+spec:
+  ports:
+  - port: $POD_PORT 
+    targetPort: $POD_PORT
+    name: web
+  selector:
+    group: Infrastructure-Team
+    application: ske-console
+    project: ske
+    cid: sg
+    env: $ENVIRONMENT

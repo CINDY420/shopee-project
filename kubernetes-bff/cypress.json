@@ -1,0 +1,38 @@
+{
+  "integrationFolder": "cypress/api",
+  "experimentalRunEvents": true,
+  "baseUrl": "http://localhost:3000/api/v3",
+  "chromeWebSecurity": false,
+  "env": {
+    "prometheusUrl": "http://localhost:2020",
+    "group": "Infrastructure Team",
+    "project": "bffautotest",
+    "application": "bffautotest",
+    "deployment": "bffautotest",
+    "cluster": {
+      "name": "kind-5",
+      "nodes": ["kind-5-control-plane", "kind-5-worker", "kind-5-worker2", "kind-5-worker3"],
+      "cid": "SG",
+      "environment": "DEV",
+      "quotasConfig": [
+        {
+          "cpuTotal": 5,
+          "memoryTotal": 5,
+          "name": "Infrastructure Team:DEV"
+        }
+      ]
+    },
+      "apiServer": {
+    "customObj": {
+      "group": "app.kubernetes.devops.i.sz.shopee.io",
+      "version": "v1",
+      "namespace": "default",
+      "namespacePrefix": "plat-"
+    }
+  }
+  },
+  "video": false,
+  "videoUploadOnPasses": false,
+  "screenshotOnRunFailure": false,
+  "trashAssetsBeforeRuns": false
+}

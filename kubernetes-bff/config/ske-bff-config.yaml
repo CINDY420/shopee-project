@@ -1,0 +1,6 @@
+rateLimit:
+  ttl: 1 # unit is second
+  limit: 10 # the maximum number of requests within the ttl limit
+  specificBots: # specific config for some bots
+    - { id: 4000, ttl: 3, limit: 20 }
+    - { id: 4020, ttl: 3, limit: 40 }

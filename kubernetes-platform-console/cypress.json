@@ -1,0 +1,18 @@
+{
+  "integrationFolder": "cypress/ui",
+  "experimentalRunEvents": true,
+  "baseUrl": "http://localhost:4200",
+  "env": {
+    "cypressEnv": "",
+    "baseUrlMap": {
+      "test": "https://kube-test.devops.test.sz.shopee.io",
+      "dev": "http://localhost:4200"
+    },
+    "apiDomain": "kube-test.devops.test.sz.shopee.io"
+  },
+  "projectId": "b131o9",
+  "chromeWebSecurity": false,
+  "viewportWidth": 1400,
+  "viewportHeight": 900
+}
+

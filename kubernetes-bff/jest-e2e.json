@@ -1,0 +1,20 @@
+{
+  "moduleFileExtensions": ["js", "json", "ts"],
+  "rootDir": "./src",
+  "modulePaths": ["<rootDir>"],
+  "testRegex": "e2e-spec.ts$",
+  "transform": {
+    "^.+\\.(t|j)s$": "ts-jest"
+  },
+  "coverageDirectory": "./coverage",
+  "testEnvironment": "../dist/test/jest-nest-environment.js",
+  "moduleDirectories": ["node_modules", "src"],
+  "reporters": [
+    "default",
+    ["../node_modules/jest-html-reporter", {
+      "pageTitle": "Nest e2e test report",
+      "includeFailureMsg": true
+    }]
+  ],
+  "testTimeout": 20000
+}

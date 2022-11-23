@@ -1,0 +1,31 @@
+apiVersion: app.kubernetes.devops.i.sz.shopee.io/v1
+kind: ApplicationInstance
+metadata:
+  finalizers:
+    - applicationinstance.finalizers.kubernetes.shopee.io
+  generation: 8
+  name: {{appName}}-test-test-sg
+  namespace: plat-autotestbff
+spec:
+  application: {{appName}}
+  cid: SG
+  cluster: test
+  deploySpec:
+    replicas: 1
+    renderParam:
+      cpu: "1"
+      mem: "1024"
+      image: harbor.test.shopeemobile.com/shopee/zhuye-demo-test-sg:0618ea58460c
+      replicas: "1"
+      use_dep_service_config: "false"
+      zks: "{}"
+      termination_grace_period_seconds: "30"
+      deploy_definition: "deploy/demo.json"
+      idc: "sg2"
+    resourceVersion: "174004490"
+  env: TEST
+  group: Infrastructure Team
+  instance: deployment
+  project: autotestbff
+  source: platform
+  template: {{appName}}

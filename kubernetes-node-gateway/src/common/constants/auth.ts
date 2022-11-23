@@ -1,0 +1,2 @@
+export const AUTH_DEFAULT_OFFSET = 0
+export const AUTH_MAX_SEARCH_COUNT = 10000

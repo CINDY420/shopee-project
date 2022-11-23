@@ -1,0 +1,192 @@
+apiVersion: app.kubernetes.devops.i.sz.shopee.io/v1
+kind: ApplicationZoneDeployTemplate
+metadata:
+  namespace: plat-autotestbff
+  name: zebin
+spec:
+  group: Infrastructure Team
+  project: autotestbff
+  application: zebin
+  cluster: test
+  env: TEST
+  cid: SG
+  deployTemplateSpec: |-
+    replicas: {{ .replicas }}
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 0
+      type: RollingUpdate
+    selector:
+      matchLabels:
+        phase: blue
+    template:
+      metadata:
+        labels:
+          phase: blue
+      spec:
+        affinity:
+          podAntiAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+              - weight: 10
+                podAffinityTerm:
+                  labelSelector:
+                    matchLabels:
+                      env: "{{ .env }}"
+                      cid: "{{ .cid }}"
+                      group: "{{ .group }}"
+                      project: "{{ .project }}"
+                      application: "{{ .project }}-{{ .application }}"
+                  topologyKey: kubernetes.io/hostname
+        terminationGracePeriodSeconds: {{ .termination_grace_period_seconds }}
+        containers:
+        {{ if and (eq .fte_enable "true") (eq .use_dep_service_config "false") }}
+              - name: egress-envoy
+                image: harbor.shopeemobile.com/devops-sz/envoy:v0.1.0
+                volumeMounts:
+                - mountPath: /etc/envoy
+                  name: envoy-config
+                command:
+                - envoy
+                - -c
+                - /etc/envoy/envoy.yaml
+                securityContext:
+                  runAsUser: 1337
+                  allowPrivilegeEscalation: true
+                  capabilities:
+                    add:
+                    - SYS_ADMIN
+        {{ end }}
+              - name: {{ .project }}-{{ .application }}-{{ .env }}-{{ .cid }}
+                image: {{ .image }}
+                imagePullPolicy: Always
+                resources:
+                  limits:
+                    cpu: "{{ .cpu }}"
+                    memory: "{{ .mem }}Mi"
+                  requests:
+        {{ if eq .env "live" }}
+                    cpu: "{{ .cpu }}"
+                    memory: "{{ .mem }}Mi"
+        {{ else if eq .env "liveish" }}
+                    cpu: "{{ .cpu }}"
+                    memory: "{{ .mem }}Mi"
+        {{ else }}
+                    cpu: "{{ .cpu }}"
+                    memory: "{{ .mem }}Mi"
+        {{ end }}
+                command: ["bash", "-c", "sleep 1 && exec smb run -e {{ .env }} -c {{ .cid }} -i {{ .idc }}"]
+                ports:
+                - containerPort: 8080
+                env:
+                - name: AGENT_IP
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: status.podIP
+                - name: POD_IP
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: status.podIP
+                - name: POD_NAME
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.name
+                - name: ZK_URL
+                  value: {{ .zk }}
+                - name: SERVICES_FILE_PATH
+                  value: "service_deps/services.json"
+                - name: SERVICE_NAME
+                  value: "{{ .project }}-{{ .application }}-{{ .env }}-{{ .cid }}"
+                - name: CPUS
+                  value: "{{ .cpu }}"
+                - name: MESOS_TASK_ID
+                  value: "{{ .project }}-{{ .application }}-{{ .env }}-{{ .cid }}.191217113936295952.191217113936295952"
+                - name: CONFIG_FILE_PATH
+                  value: "service_deps/config.json"
+                - name: LANG
+                  value: "C.UTF-8"
+                - name: RUNNING_CONTEXT
+                  value: "docker"
+                - name: IDC
+                  value: "{{ .idc }}"
+                - name: MARATHON_APP_INSTANCES
+                  value: "{{ .replicas }}"
+                - name: MEM
+                  value: "{{ .mem }}"
+                - name: INSTANCES_COUNT_DESIRED
+                  value: "{{ .replicas }}"
+                - name: PROJECT_NAME
+                  value: "{{ .project }}"
+                - name: MODULE_NAME
+                  value: "{{ .application }}"
+                - name: INDEX
+                  value: "1"
+                - name: PORT_prometheus
+                  value: "{{ .prometheus_port }}"
+                - name: PORT
+                  value: "8080"
+        {{ if eq .fte_enable "true" }}
+                - name: FTE_NAME
+                  value: "{{ .fte_name }}"
+                - name: PFB_OPTIONS
+                  value: '{{ .fte_pfb_options }}'
+        {{ end }}
+                lifecycle:
+                  postStart:
+                    exec:
+                      command:
+                      - bash
+                      - -c
+                      - |
+                        bash  <<EOF
+                        export LOGDIR=\$(echo $POD_NAME | cut -d '-' -f3,4 --output-delimiter='')
+                        mkdir -p /data/log/\$LOGDIR
+                        rm -rf log
+                        ln -s /data/log/\$LOGDIR log
+                        python -c '
+                        import sys,json
+                        app="{{ .application }}"
+                        specf="{{ .deploy_definition }}"
+                        with open(specf) as f:
+                            spec = json.load(f)
+                        pds = spec.get("run", {}).get("port_definitions", [])
+        {{ if eq .fte_enable "true" }}
+                        spec["module_name"] = spec["module_name"] + "-" + "{{ .fte_name }}"
+        {{ end }}
+                        spec["run"]["acquire_prometheus_port"] = False
+                        spec["run"]["enable_prometheus"] = False
+        {{ if not .keep_smb_smoke }}
+                        try:
+                            del spec["run"]["smoke"]
+                        except KeyError:
+                            pass
+        {{ end }}
+                        try:
+                            del spec["per_feature_branch"]
+                        except KeyError:
+                            pass
+                        new_pds = []
+        {{ if eq .fte_enable "true" }}
+                        new_pds.append({"submodule": app + "-" + "{{ .fte_name }}" , "port": "8080"})
+        {{ else }}
+                        new_pds.append({"submodule": app, "port": "8080"})
+        {{ end }}
+                        port = 8081
+                        for pd in pds:
+                            if pd.get("submodule", "") == app:
+                                continue
+                            elif pd.get("submodule", "") != "":
+        {{ if eq .fte_enable "true" }}
+                                pd["submodule"] = pd["submodule"] + "-" + "{{ .fte_name }}"
+        {{ end }}
+                                pd["expose_port"] = str(port)
+                                new_pds.append(pd)
+                                port += 1
+                        spec["run"]["port_definitions"] = new_pds
+                        with open(specf, "w") as f:
+                            f.write(json.dumps(spec, indent=4))
+                        '
+                        EOF
+                  preStop:
+                    exec:
+                      command: ["bash", "-c", "sleep 15"]

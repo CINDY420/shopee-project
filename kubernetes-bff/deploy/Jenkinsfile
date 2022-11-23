@@ -1,0 +1,139 @@
+#!groovy
+def APP_NAME='ske-node-gateway'
+def GROUP='shopee' // harbor.shopeemobile.com/$GROUP/image:tag
+def REGISTRY_CRED='harbor-szdevops'  // harbor.shopeemobile.com credential
+def POD_PORT='3000'
+def METRICS_PORT = '2020'
+
+def dockerImageExists(String imageId) {
+    cmd = "bash -c '(DOCKER_CLI_EXPERIMENTAL=enabled docker manifest inspect ${imageId} > /dev/null 2>&1 && echo found) || echo notfound'"
+    found = sh([returnStdout: true, script: cmd]).trim()
+    if (found == 'found') {
+        return true
+    }
+    return false
+}
+
+node ('slave') {
+    properties([
+        parameters([
+            choice(choices: ['platform-backend', 'platform-backend-plat'], defaultValue: 'platform-backend', description: '', name: 'NAMESPACE'),
+            string(name: 'REPLICAS', defaultValue: '3', description: ''),
+            string(name: 'CPU', defaultValue: '1', description: ''),
+            string(name: 'MEMORY', defaultValue: '1', description: ''),
+
+            choice(choices: ['test', 'plat-test', 'dev', 'live', 'uat','staging', 'banking-test', 'banking-live'], defaultValue: 'dev', description: '', name: 'ENVIRONMENT'),
+            booleanParam(defaultValue: false, name: "TAG_RELEASE", description: ''),
+            gitParameter(name: 'TAG', type: 'PT_TAG', sortMode: 'DESCENDING_SMART',
+                         quickFilterEnabled: true, description: ''),
+            gitParameter(name: 'BRANCH', type: 'PT_BRANCH', sortMode: 'DESCENDING_SMART',
+                         quickFilterEnabled: true, description: ''),
+        ])
+    ])
+
+
+    def kubeConfigId = "devops-kube-${ENVIRONMENT}"
+
+    def tag = ''
+    if (params.TAG_RELEASE){
+        tag = params.TAG
+    } else {
+        tag = params.BRANCH
+    }
+
+    // Get scm url and cred
+    def scmUrl = scm.getUserRemoteConfigs()[0].getUrl()
+    def scmCred = scm.getUserRemoteConfigs()[0].getCredentialsId()
+
+    def canary = params.CANARY
+    def myRepo = checkout([$class: 'GitSCM',
+                           branches: [[name: "${tag}"]],
+                           doGenerateSubmoduleConfigurations: false,
+                           extensions: [],
+                           gitTool: 'Default',
+                           userRemoteConfigs: [[url: "${scmUrl}", credentialsId: "${scmCred}"
+        ]],
+    ])
+
+    def gitCommit = myRepo.GIT_COMMIT
+    def gitBranch = myRepo.GIT_BRANCH
+    def shortGitCommit = "${gitCommit[0..10]}"
+
+    def imageTag = ''
+    if (params.TAG_RELEASE){
+        imageTag = tag
+    } else {
+        imageTag = "git-${shortGitCommit}"
+    }
+
+    imageTag = "${imageTag}-${ENVIRONMENT}"
+    def IMAGE_NAME = "harbor.shopeemobile.com/${GROUP}/${APP_NAME}:${imageTag}"
+    def DEBUGGER_IMAGE_NAME = "harbor.shopeemobile.com/${GROUP}/ske-debugger:${imageTag}"
+
+    stage('Build-Debugger') {
+        docker.withRegistry('https://harbor.shopeemobile.com', "${REGISTRY_CRED}") {
+            if (!dockerImageExists("${DEBUGGER_IMAGE_NAME}"))  {
+                def customImage = docker.build("${DEBUGGER_IMAGE_NAME}", "--network=host -f debugger/Dockerfile .")
+                customImage.push()
+            }
+        }
+    }
+
+    stage('Build') {
+        docker.withRegistry('https://harbor.shopeemobile.com', "${REGISTRY_CRED}") {
+            if (!dockerImageExists("${IMAGE_NAME}"))  {
+                def customImage = docker.build("${IMAGE_NAME}", "--build-arg ENV=${ENVIRONMENT} --build-arg DEBUGGER_IMAGE=${DEBUGGER_IMAGE_NAME} --network=host -f deploy/Dockerfile .")
+                customImage.push()
+            }
+        }
+    }
+
+    stage('Config') {
+        sh """
+        sed -i '
+                s#\$IMAGE_NAME#$IMAGE_NAME#g
+                s#\$NAMESPACE#$NAMESPACE#g
+                s#\$REPLICAS#$REPLICAS#g
+                s#\$APP_NAME#$APP_NAME#g
+                s#\$POD_PORT#$POD_PORT#g
+                s#\$METRICS_PORT#$METRICS_PORT#g
+                s#\$ENVIRONMENT#$ENVIRONMENT#g
+                s#\$CPU#$CPU#g
+                s#\$MEMORY#${MEMORY}Gi#g
+               ' deploy/deploy.yml
+        """
+    }
+
+    // stage('Deploy'){
+    //     kubernetesDeploy(kubeconfigId: "${kubeConfigId}",
+    //                      configs: 'deploy/deploy.yml',
+    //                      enableConfigSubstitution: true,
+    //     )
+    // }
+
+    stage('Deploy'){
+        withCredentials([kubeconfigContent(credentialsId: "${kubeConfigId}",variable: 'kubeconfig')]) {
+            sh """#!/bin/bash
+                mkdir -p ~/.kube && echo "\$kubeconfig" > ~/.kube/config
+                kubectl apply -f deploy/deploy.yml
+            """
+        }
+    }
+
+    stage('Poll Status') {
+        def appName="${APP_NAME}"
+        def ns="${NAMESPACE}"
+        withCredentials([kubeconfigContent(credentialsId: "${kubeConfigId}",
+                                           variable: 'kubeconfig')]) {
+            sh """#!/bin/bash
+                   mkdir -p ~/.kube && echo "\$kubeconfig" > ~/.kube/config
+                   message="Deploy had some problems, please check the kubernetes for details."
+                   kubectl -n $ns rollout status deploy/$appName
+                   if [ \$? == 0 ]; then
+                      message="Deploy rollout succeeded."
+                   fi
+                   echo "\$message"
+                   """
+        }
+    }
+}

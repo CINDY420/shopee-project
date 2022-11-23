@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: ske-kubernetes-node-gateway-$ENVIRONMENT
+  name: ske-kubernetes-node-gateway-$ENVIRONMENT
+  namespace: $NAMESPACE
+spec:
+  ports:
+    - port: $POD_PORT
+      targetPort: $POD_PORT
+      name: web
+    - port: $METRICS_PORT
+      targetPort: $METRICS_PORT
+      name: metrics
+  selector:
+    application: ske-kubernetes-node-gateway
+    project: ske
+    group: Infrastructure-Team
+    cid: sg
+    env: $ENVIRONMENT

@@ -1,0 +1,8 @@
+export const danger = '#F5222D'
+export const primary = '#1890ff'
+export const info = '#98d8fa'
+export const success = '#6FC9CA'
+export const grey = '#bfbfbf'
+export const warning = '#faaf0f'
+export const unknown = '#888888'
+export const pending = '#999999'

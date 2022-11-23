@@ -1,0 +1,105 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: ske-kubernetes-node-gateway
+    application: ske-kubernetes-node-gateway
+    project: ske
+    group: Infrastructure-Team
+    cid: sg
+    env: $ENVIRONMENT
+    sdu_prefix: ske-nodegatewayv1
+  name: ske-kubernetes-node-gateway
+  namespace: $NAMESPACE
+spec:
+  replicas: $REPLICAS
+  selector:
+    matchLabels:
+      app: ske-kubernetes-node-gateway
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: ske-kubernetes-node-gateway
+        application: ske-kubernetes-node-gateway
+        project: ske
+        group: Infrastructure-Team
+        cid: sg
+        env: $ENVIRONMENT
+        metrics: "true"
+        sdu_prefix: ske-nodegatewayv1
+    spec:
+      containers:
+        - image: $IMAGE_NAME
+          name: ske-kubernetes-node-gateway
+          ports:
+            - containerPort: $POD_PORT
+              name: http
+              protocol: TCP
+            - containerPort: $METRICS_PORT
+              name: metrics
+              protocol: TCP
+          readinessProbe:
+            tcpSocket:
+              port: $POD_PORT
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: $POD_PORT
+            initialDelaySeconds: 5
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: $CPU
+              memory: $MEMORY
+            limits:
+              cpu: $CPU
+              memory: $MEMORY
+          lifecycle:
+            preStop:
+              exec:
+                command: [ "sh", "-c", "sleep 3" ]
+          env:
+            - name: NODE_ENV
+              value: $ENVIRONMENT
+            - name: DEM_KUBE_POD_NAME
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.name
+            - name: SERVICE_NAME
+              value: ske-nodegatewayv1-$ENVIRONMENT-sg
+            - name: ENV
+              value: $ENVIRONMENT
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: PORT
+              value: "0"
+          volumeMounts:
+            - mountPath: /etc/global-config/
+              readOnly: true
+              name: global-config
+            - mountPath: /etc/global-config-v3/
+              readOnly: true
+              name: global-config-v3
+            - mountPath: /workspace/log
+              name: log
+      serviceAccountName: platform-crd
+      volumes:
+        - name: global-config
+          configMap:
+            name: ske-kubernetes-node-gateway-config
+        - name: global-config-v3
+          configMap:
+            name: ske-gateway-global-config
+        - name: log
+          hostPath:
+            path: /data/log/ske-kubernetes-node-gateway-$ENVIRONMENT-sg/log
+            type: DirectoryOrCreate

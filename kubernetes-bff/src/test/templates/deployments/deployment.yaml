@@ -1,0 +1,196 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    application: {{appName}}
+    cid: {{cid}}
+    env: {{env}}
+    group: Infrastructure-Team
+    project: autotestbff
+  name: {{deploymentName}}
+  namespace: {{namespace}}
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 3
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      application: {{appName}}
+      cid: {{cid}}
+      env: {{env}}
+      group: Infrastructure-Team
+      project: autotestbff
+      phase: release
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        application: {{appName}}
+        cid: {{cid}}
+        env: {{env}}
+        group: Infrastructure-Team
+        project: autotestbff
+        phase: release
+    spec:
+      containers:
+      - command:
+        - bash
+        - -c
+        - sleep 1 && exec smb run -e test -c sg -i sg2
+        env:
+        - name: AGENT_IP
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: status.podIP
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: status.podIP
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.name
+        - name: ZK_URL
+          value: zk://zookeeper-1:2181,zookeeper-2:2181,zookeeper-3:2181/mesos-test-sg2
+        - name: SERVICES_FILE_PATH
+          value: service_deps/services.json
+        - name: SERVICE_NAME
+          value: gxm-demo-test-sg
+        - name: CPUS
+          value: "0.5"
+        - name: MESOS_TASK_ID
+          value: gxm-demo-test-sg.191217113936295952.191217113936295952
+        - name: CONFIG_FILE_PATH
+          value: service_deps/config.json
+        - name: LANG
+          value: C.UTF-8
+        - name: RUNNING_CONTEXT
+          value: docker
+        - name: IDC
+          value: sg2
+        - name: MARATHON_APP_INSTANCES
+          value: "5"
+        - name: MEM
+          value: "1024"
+        - name: INSTANCES_COUNT_DESIRED
+          value: "5"
+        - name: PROJECT_NAME
+          value: gxm
+        - name: MODULE_NAME
+          value: demo
+        - name: INDEX
+          value: "1"
+        - name: PORT_prometheus
+          value: "9090"
+        - name: PORT
+          value: "8080"
+        image: harbor.test.shopeemobile.com/shopee/gxm-demo-test-sg:375f7bb0b31e
+        imagePullPolicy: IfNotPresent
+        lifecycle:
+          postStart:
+            exec:
+              command:
+              - bash
+              - -c
+              - |
+                bash  <<EOF
+                export LOGDIR=\$(echo $POD_NAME | cut -d '-' -f3,4 --output-delimiter='')
+                mkdir -p /data/log/\$LOGDIR
+                rm -rf log
+                ln -s /data/log/\$LOGDIR log
+                python -c '
+                import sys,json
+                app="demo"
+                specf="deploy/canary.json"
+                with open(specf) as f:
+                    spec = json.load(f)
+                pds = spec.get("run", {}).get("port_definitions", [])
+
+                spec["run"]["acquire_prometheus_port"] = False
+                spec["run"]["enable_prometheus"] = False
+
+                try:
+                    del spec["run"]["smoke"]
+                except KeyError:
+                    pass
+
+                try:
+                    del spec["per_feature_branch"]
+                except KeyError:
+                    pass
+                new_pds = []
+
+                new_pds.append({"submodule": app, "port": "8080"})
+
+                port = 8081
+                for pd in pds:
+                    if pd.get("submodule", "") == app:
+                        continue
+                    elif pd.get("submodule", "") != "":
+
+                        pd["expose_port"] = str(port)
+                        new_pds.append(pd)
+                        port += 1
+                spec["run"]["port_definitions"] = new_pds
+                with open(specf, "w") as f:
+                    f.write(json.dumps(spec, indent=4))
+                '
+                EOF
+          preStop:
+            exec:
+              command:
+              - bash
+              - -c
+              - sleep 15
+        name: gxm-demo-test-sg
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        readinessProbe:
+          exec:
+            command:
+            - bash
+            - -c
+            - bash  check.sh
+          failureThreshold: 10
+          initialDelaySeconds: 15
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 5
+        resources:
+          limits:
+            cpu: 500m
+            memory: 1Gi
+          requests:
+            cpu: 50m
+            memory: 107374182400m
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /run/spex
+          name: spex-domainsocket
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - hostPath:
+          path: /data/log/gxm-demo-test-sg
+          type: DirectoryOrCreate
+        name: log
+      - hostPath:
+          path: /run/spex/
+          type: DirectoryOrCreate
+        name: spex-domainsocket
+      - hostPath:
+          path: /var/lib/docker
+          type: Directory
+        name: docker-path

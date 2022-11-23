@@ -1,0 +1,77 @@
+# This config file contains the global configuration for the whole application
+# Please note that this file only works at local environment.
+# In production environment, the configuration will be read from the configmap object of k8s cluster
+groups:
+  [
+    'Seller Group',
+    'Financial Services Group',
+    'To C Group',
+    'Supply Chain Group',
+    'Infrastructure Team',
+    'Client Group',
+    'Banking',
+    'Data Science Group'
+  ]
+envs: [DEV, TEST, UAT, STAGING, LIVE, LIVEISH, STABLE, QA, SIT, TEST1]
+cids: [SG, VN, ID, TH, MY, PH, TW, CN, BR, IN, XX, MX, CO, CL]
+pipelineToken: TMkLCV8ANut3Yx17k92a06tgWudWib9chYwO9LvUbSR93W3Yf1Tvt1mZthl8L8Yf
+wxcorpid: wwa7fadf450423a8bb&corpsecret=Nn-uv4eipPgyPbUFvLFJ0_qRPobcmmFgLJej31Tuil4
+oversold: ['sg2-test']
+sreWhitelistEmail:
+  [
+    'xiamei.guo@shopee.com',
+    'guiqin.huang@shopee.com',
+    'yongqiang.li@shopee.com',
+    'xiaojie.liu@shopee.com',
+    'tao.dan@shopee.com',
+    'zhiqian.feng@shopee.com',
+    'jian.cheng@shopee.com',
+    'li.zhang@shopee.com',
+    'yangyang.geng@shopee.com',
+    'xiaolei.ren@shopee.com',
+    'junlian.liao@shopee.com',
+    'qingyang.dai@shopee.com',
+    'zepeng.yao@shopee.com',
+    'kai.zhang@shopee.com',
+    'wenbiao.chen@shopee.com',
+    'jiaqi.hao@shopee.com',
+    'honghe.zhuang@shopee.com',
+    'yixun.qiu@shopee.com'
+  ]
+livePodExec: 'true'
+statuses: [Ready, Not Ready, Unknown, SchedulingDisabled]
+roles: [master, worker, gateway, ingress]
+maxReplicas: 1000
+podContainerNameRegex: ["^.*t-a.*$"]
+userGroupConfig:
+  [
+    { Id: 142, Name: 'Seller Group', Approver: 'lu.zhong@shopee.com' },
+    { Id: 158, Name: 'Supply Chain Group', Approver: 'zepeng.yao@shopee.com' },
+    { Id: 155, Name: 'To C Group', Approver: 'junlian.liao@shopee.com,yangyang.geng@shopee.com' },
+    { Id: 151, Name: 'Financial Services Group', Approver: 'xiaoning.li@shopee.com' },
+    { Id: 191, Name: 'Infrastructure Team', Approver: 'liangkui.zhou@shopee.com' },
+    { Id: 436, Name: 'Banking', Approver: 'guanghui.cao@shopee.com,qiancheng.yang@shopee.com,lei.yang@shopee.com' },
+    { Id: 1234, Name: 'Data Science Group', Approver: 'philip.cheng@shopee.com' }
+  ]
+UserGroupAdmin:
+  [
+    'qinhong.feng@shopee.com',
+    'li.ye@shopee.com',
+    'xiaoyang.zhu@shopee.com',
+    'xiamei.guo@shopee.com',
+    'zhiwen.gao@shopee.com',
+    'yongxing.wang@shopee.com',
+    'changyue.li@shopee.com',
+    'xiaocong.dong@shopee.com'
+  ]
+beatsClusterSwitch: 'false'
+beatsGroupSwitch: 'false'
+beatsProjectSwitch: 'false'
+beatsApplicationSwitch: 'false'
+oamApplications: ["zhuye-demo"]
+templateTypes: ["pipeline-deployment","pipeline-statefulset","pipeline-deployment-enhance", "pipeline-deployment-enhance-dp"]
+profDescriptorObject: ["CPU", "Alloc", "Heap", "Goroutine", "Block", "Trace"]
+deleteDeploymentConfig:
+      allowDeleteClusters: ["test", "kube-general-sg2-test", "kube-general-ctl-live", "sg5-k8s-live-001", "kube-content-rc-live"]
+      prohibitDeleteProjects: ["mdap", "lltest"]
+silence: false

@@ -1,0 +1,23 @@
+http:
+  protocol: 'http'
+  host: 'localhost'
+  port: '3000'
+
+es:
+  protocol: 'http'
+  host: 'elasticsearch-ske-database.ske-database'
+  port: 9200
+
+agent:
+  protocol: 'http'
+  host: 'ske-agent'
+  port: 5000
+
+metrics:
+  protocol: 'http'
+  host: 'sc-metrics'
+  port: 8080
+
+mailer:
+  server: 'smtp.shopeemobile.com'
+  port: '587'

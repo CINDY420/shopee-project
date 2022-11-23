@@ -1,0 +1,111 @@
+export enum RESOURCE_TYPE {
+  CLUSTER = 'Cluster',
+  CLUSTER_QUOTA = 'ClusterQuota',
+  NODE = 'Node',
+  TENANT = 'Tenant',
+  GLOBAL_USER = 'GlobalUser',
+  GLOBAL_BOT = 'GlobalBot',
+  OPERATION_LOG = 'OperationLog',
+  TERMINAL_TICKET = 'TerminalTicket',
+  ACCESS_TICKET = 'AccessTicket',
+  TENANT_USER = 'TenantUser',
+  TENANT_BOT = 'TenantBot',
+  PROJECT_QUOTA = 'ProjectQuota',
+  PROJECT = 'Project',
+  APPLICATION = 'Application',
+  APPLICATION_DEPLOY_CONFIG = 'Application/DeployConfig',
+  SERVICE = 'Service',
+  INGRESS = 'Ingress',
+  DEPLOYMENT = 'Deployment',
+  POD = 'Pod',
+  POD_TERMINAL = 'Pod/Terminal',
+  PIPELINE = 'Pipeline',
+  RELEASE_FREEZE = 'ReleaseFreeze',
+  OPS = 'OPS',
+  HPA_RULES = 'HPARules',
+  HPA_CONTROLLER = 'HPAController',
+  ZONE = 'Zone'
+}
+
+export enum PERMISSION_SCOPE {
+  GLOBAL = 'GLOBAL',
+  TENANT = 'TENANT'
+}
+
+export enum RESOURCE_ACTION {
+  Add = 'Add',
+  View = 'View',
+  Delete = 'Delete',
+  Edit = 'Edit',
+  Create = 'Create',
+  Unbind = 'Unbind',
+  Label = 'Label',
+  Drain = 'Drain',
+  Cordon = 'Cordon',
+  Taint = 'Taint',
+  Transfer = 'Transfer',
+  Uncordon = 'Uncordon',
+  BatchLabel = 'BatchLabel',
+  BatchDrain = 'BatchDrain',
+  BatchCordon = 'BatchCordon',
+  BatchTaint = 'BatchTaint',
+  BatchUncordon = 'BatchUncordon',
+  ScaleLive = 'ScaleLive',
+  RollbackLive = 'RollbackLive',
+  FullReleaseLive = 'FullReleaseLive',
+  RolloutRestartLive = 'RolloutRestartLive',
+  CancelCanaryLive = 'CancelCanaryLive',
+  EditResourceLive = 'EditResourceLive',
+  BatchScaleLive = 'BatchScaleLive',
+  BatchFullReleaseLive = 'BatchFullReleaseLive',
+  BatchRolloutRestartLive = 'BatchRolloutRestartLive',
+  ScaleNonLive = 'ScaleNonLive',
+  RollbackNonLive = 'RollbackNonLive',
+  FullReleaseNonLive = 'FullReleaseNonLive',
+  RolloutRestartNonLive = 'RolloutRestartNonLive',
+  CancelCanaryNonLive = 'CancelCanaryNonLive',
+  EditResourceNonLive = 'EditResourceNonLive',
+  BatchScaleNonLive = 'BatchScaleNonLive',
+  BatchFullReleaseNonLive = 'BatchFullReleaseNonLive',
+  BatchRolloutRestartNonLive = 'BatchRolloutRestartNonLive',
+  KillLive = 'KillLive',
+  BatchKillLive = 'BatchKillLive',
+  KillNonLive = 'KillNonLive',
+  BatchKillNonLive = 'BatchKillNonLive',
+  Approve = 'Approve',
+  ApproveLive = 'ApproveLive',
+  ViewLive = 'ViewLive',
+  ViewNonLive = 'ViewNonLive',
+  DeleteLive = 'DeleteLive',
+  DeleteNonLive = 'DeleteNonLive',
+  // for pipeline
+  CreateNonLive = 'CreateNonLive',
+  EditNonLive = 'EditNonLive',
+  RunNonLive = 'RunNonLive',
+  RebuildNonLive = 'RebuildNonLive',
+  AbortNonLive = 'AbortNonLive',
+  CreateLive = 'CreateLive',
+  EditLive = 'EditLive',
+  RunLive = 'RunLive',
+  RebuildLive = 'RebuildLive',
+  AbortLive = 'AbortLive',
+  Import = 'Import',
+  Move = 'Move',
+  Migrate = 'Migrate',
+  BatchMigrate = 'BatchMigrate',
+  // for release freeze
+  Stop = 'Stop',
+  // for ops
+  BatchEdit = 'BatchEdit',
+  BatchDelete = 'BatchDelete',
+  AddNewEstimates = 'AddNewEstimates',
+  BatchAddNewEstimates = 'BatchAddNewEstimates',
+  // for hpa
+  COPY = 'Copy'
+}
+
+export const PLATFORM_ADMIN_ID = 2000
+export const PLATFORM_TENANT_ID = 0
+export const TENANT_ADMIN_ID = 2001
+export const LIVE_OPERATOR_ID = 2002
+export const TENANT_DEVELOPER_ID = 2004

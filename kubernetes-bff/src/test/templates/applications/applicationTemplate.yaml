@@ -1,0 +1,46 @@
+apiVersion: app.kubernetes.devops.i.sz.shopee.io/v1
+kind: ApplicationZoneDeployTemplate
+metadata:
+  namespace: plat-autotestbff
+  name: zebin
+spec:
+  # Add fields here
+  group: Infrastructure Team
+  project: autotestbff
+  application: zebin
+  cluster: test
+  env: TEST
+  cid: SG
+  deployTemplateSpec: |-
+    replicas: {{ .replicas }}
+    strategy:
+      rollingUpdate:
+        maxSurge: {{ .max_surge }}
+        maxUnavailable: 0
+      type: RollingUpdate
+    template:
+      spec:
+        terminationGracePeriodSeconds: {{ .termination_grace_period_seconds }}
+        containers:
+          - name: {{ .project }}-{{ .application }}-{{ .env }}-{{ .cid }}
+            image: {{ .image }}
+            imagePullPolicy: Always
+            resources:
+              limits:
+                cpu: "{{ .cpu }}"
+                memory: "{{ .mem }}Mi"
+              requests:
+                cpu: "{{ .cpu }}"
+                memory: "{{ .mem }}Mi"
+              command: ["bash", "-c", "sleep 1 && exec smb run -e {{ .env }} -c {{ .cid }} -i {{ .idc }}"]
+              ports:
+              - containerPort: 8080
+              env:
+              - name: AGENT_IP
+                valueFrom:
+                  fieldRef:
+                    fieldPath: status.podIP
+              - name: POD_IP
+                valueFrom:
+                  fieldRef:
+                    fieldPath: status.podIP

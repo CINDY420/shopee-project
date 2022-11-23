@@ -1,0 +1,11 @@
+export enum READY_STATE {
+  CONNECTING_STATE = 0,
+  OPEN_STATE = 1,
+  CLOSING_STATE = 2,
+  CLOSED_STATE = 3
+}
+
+export const VIRTUAL_PORT = {
+  POD_TERMINAL: 3001,
+  POD_LOG: 3002
+}

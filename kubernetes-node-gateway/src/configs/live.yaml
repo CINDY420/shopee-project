@@ -1,0 +1,53 @@
+http:
+  protocol: 'http'
+  host: 'localhost'
+  port: '3000'
+
+es:
+  protocol: 'http'
+  host: 'elasticsearch-ske-database.ske-database'
+  port: 9200
+
+auth:
+  protocol: 'http'
+  host: 'auth'
+  port: 8080
+
+openApi:
+  protocol: 'http'
+  host: 'open-api'
+  port: 8081
+
+openApiExternal:
+  protocol: 'https'
+  host: 'kube-open-api-live.devops.i.sz.shopee.io'
+
+mailer:
+  server: 'smtp.shopeemobile.com'
+  port: '587'
+  from: 'kubernetes@shopee.com'
+
+shopeeTicketCenter:
+  appName: Elastic Compute Platform
+  appId: 10034
+  appSecret: ZhfXhLMa81Omv7MZSTOvTRquBOeuJgDu
+  baseUrl: https://stc.shopee.io/rest/v2
+  botToken: eyJhbGciOiJSUzI1NiIsImtpZCI6IjQ0ZmI1YTlmZjQwNzM3M2RkN2E5MDIyNThiNzY4ZTVmMGYwYWZiM2IiLCJ0eXAiOiJKV1QifQ.eyJJRCI6NDAwNiwiU2NvcGUiOiJib3QiLCJFbWFpbCI6IiIsImV4cCI6MTk1NjEyNDYzM30.Re3wHT6SXLFl2mokQIvgJpI980NXW5VrWYDdZzvwUaeDsJCah0CCYw9uQDydhZuL2D0q48DjN7X94P0ZfZ2d-x_iCTZ1AncQkRbvjrWWmnyujVPmulc9Qq_FOeNPYiC0OHaPJFG9qxma6HjE7dx6bgOOUt9FZvcCkpjjvJmpNrpnGRb_1pdaE4Rx2-5Yjs2Io34TdxChzXeLC0n4h8OKB7ooQIdLiIaMMcplYY7e8emt47mAlsXaUi7RgYEVi7t6HRTaC_0W6dC0wazMqyy25L8-eOmuLP0So1F_ypVuipmz9vaf2ZeN_-dz-ERyZ7jav1v27hN84g4sc5Lno2owu-_5U5rP-f39Rz8lhROjZvrGaeeusiOCJQYcS1XW22hK50EMD9KPjxEYLUamrpMDJYmQCWP8oMlopizYpryABDQLofB6QTRt_mRZL-U28trdkA3IhM8augQP5hiJMY5SB16T0BUv4N0Th42WQfpmmwwoHuK-qL0pXDkUb6JkT79yNlCvN5c7iZrg0jeR6XoHOkXTTn8w7GIVefNEpvS0elBeQP9tD96tyU7jt2H_sI4oBEgs-xZ9rKWJrSXZXhSeST9cSfAvp85IIiZbp8jOtKDuNjakH-i9pgHQiMHzOArlE57m340Z5GCs-FaNpjV8Xmr0WRzb3NcJPqftBRt6Me8
+  processInfo:
+    DEPLOYMENT_SCALE:
+      processId: Process_grQjmRdh8ZaG
+      assigneeActivityKey: Activity_081mrgu
+      title: Elastic Compute Platform Deployment Scale
+
+opsPlatform:
+  protocol: 'http'
+  host: 'ecpadmin-api-live-cn.ecpadmin-live-cn'
+  port: 8080
+
+spaceApi:
+  protocol: 'https'
+  host: 'space.shopee.io'
+
+spaceBot:
+  username: 'goshopeelibbot'
+  password: 'ShopeePeg123'

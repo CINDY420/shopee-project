@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    application: {{appName}}
+    cid: {{cid}}
+    env: {{env}}
+    group: Infrastructure-Team
+    phase: green
+    project: autotestbff
+    stable: "false"
+  name: {{deploymentName}}-green
+  namespace: {{namespace}}
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      application: {{appName}}
+      cid: {{cid}}
+      env: {{env}}
+      group: Infrastructure-Team
+      phase: green
+      project: autotestbff
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        application: {{appName}}
+        cid: {{cid}}
+        env: {{env}}
+        group: Infrastructure-Team
+        phase: green
+        project: autotestbff
+    spec:
+      containers:
+      - image: nginx:latest
+        imagePullPolicy: IfNotPresent
+        name: web2
+        resources:
+          limits:
+            cpu: 500m
+            memory: 322122547200m
+          requests:
+            cpu: 500m
+            memory: 322122547200m
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+

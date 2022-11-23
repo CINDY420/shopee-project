@@ -1,0 +1,14 @@
+http-timeout: 10000
+stc-timeout: 10000
+openapi-timeout: 10000
+ops-platform-timeout: 60000
+specialDeploymentForTest:
+  - sg2-test
+jenkinsConfigs: ["test1", "test2"]
+announcements:
+  [
+    { tenant: 0, announcements: ['test'] },
+    { tenant: 1011, announcements: ['1011 test'] },
+    { tenant: 1012, announcements: ['1012 test'] },
+  ]
+offlineTenants: [1011]
