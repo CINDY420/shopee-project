@@ -1,0 +1,17 @@
+{
+  "alias": "RootRouterGroup",
+  "fullPath": "/",
+  "customLayoutSource": null,
+  "routes": [
+    {
+      "alias": "EcpCmdbPage",
+      "fullPath": "/ecp/cmdb",
+      "componentSource": "./ecp/cmdb/index.tsx",
+      "props": {
+        "exact": true,
+        "sensitive": false
+      }
+    }
+  ],
+  "subGroups": []
+}

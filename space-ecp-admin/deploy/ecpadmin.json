@@ -1,0 +1,56 @@
+{
+  "project_name": "space",
+  "module_name": "ecpadmin",
+  "install": {
+    "commands": [
+      "git rev-parse --verify HEAD > hash"
+    ]
+  },
+  "build": {
+    "docker_image": {
+      "base_image": "harbor.shopeemobile.com/shopee-isfe/deploy-nodejs:v16",
+      "dependent_libraries_files": [
+        "package.json",
+        "yarn.lock"
+      ],
+      "run_commands": [
+        "rm -rf dist",
+        "yarn install --frozen-lockfile"
+      ],
+      "enable_build_cache": true,
+      "build_cache_shared": true
+    },
+    "commands": [
+      "yarn build",
+      "rm -rf *.md .git src"
+    ],
+    "upload_static": {
+      "static_dir": "dist",
+      "enable_cdn": false,
+      "cdn_envs": [
+        "test",
+        "live"
+      ],
+      "static_artifact_file_paths": [
+        "ecp/admin/remoteEntry.js"
+      ]
+    },
+    "timeout": 3600
+  },
+  "per_feature_branch": {
+    "enable_container_pfb": false,
+    "enable_static_pfb": true,
+    "hostname_formats": [
+      "space.${DOMAIN_ENV_FLAG}shopee.io"
+    ]
+  },
+  "finish": {
+    "notifications": [
+      {
+        "#": "The below is reporting the deployment status to Space One Platform",
+        "type": "COMMAND",
+        "cmd": "curl --location --request POST 'https://space.shopee.io/api/spaceworkbench/app/deploy_callback_from_sdp' --header 'Content-Type: application/json' --data '{\"workspace\": \"'$WORKSPACE'\", \"build_url\": \"'$BUILD_URL'\", \"console_url\": \"'$CONSOLE_URL'\", \"deploy_cids\": \"'$DEPLOY_CIDS'\", \"deploy_env\": \"'$DEPLOY_ENV'\", \"build_number\": \"'$BUILD_NUMBER'\", \"build_result\": \"'$BUILD_RESULT'\", \"job_name\": \"'$JOB_NAME'\", \"branch\": \"'$FROM_BRANCH'\", \"deploy_env\": \"'$ENVIRONMENT'\"}'"
+      }
+    ]
+  }
+}

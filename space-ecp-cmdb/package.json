@@ -1,0 +1,68 @@
+{
+  "name": "@space/ecp-cmdb",
+  "version": "0.1.0",
+  "description": "shopee.engineering_infra.infra_products.enginfra_fe.space.ecpcmdb",
+  "license": "ISC",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "webpack --mode production --env server=live --config webpack.config.js",
+    "dev": "yarn space-dev-cli run",
+    "dev:live": "yarn dev --env server=live",
+    "dev:https": "yarn dev --https",
+    "dev:mock": "yarn dev --env server=mock",
+    "lint": "yarn run lint:js --fix && yarn run lint:css --fix",
+    "lint:quiet": "yarn run lint:js --fix --quiet && yarn run lint:css --fix",
+    "lint:css": "stylelint **/*.{css,sass,scss} --custom-syntax postcss-scss --allow-empty-input",
+    "lint:js": "eslint --quiet --color --ignore-path .eslintignore . --ext .ts,.tsx,.js",
+    "rapper": "rapper --type react --rapperPath \"src/rapper\" --apiUrl \"http://rap.shopee.io/api/repository/get?id=178&token=IeS52cAfSynslQjgn4wesLn08jHPf84S\" --rapUrl \"http://rap.shopee.io\"",
+    "check-type": "tsc --noEmit"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "devDependencies": {
+    "@space/app-entry": "^5.3.9",
+    "@space/builder": "^5.3.19",
+    "@space/lint": "^1.1.5",
+    "@types/lodash.get": "^4.4.7",
+    "@types/lodash.merge": "^4.6.7",
+    "@types/lodash.set": "^4.3.7",
+    "@types/ramda": "^0.28.12",
+    "@types/space_utility_sam": "^0.2.0",
+    "@types/styled-components": "^5.1.25",
+    "husky": "^4.3.0",
+    "@space/core": "^5.2.60",
+    "@space/dev-cli": "^1.0.1",
+    "@space/runtime-entry": "^5.3.9"
+  },
+  "publishConfig": {
+    "registry": "https://npm.shopee.io"
+  },
+  "dependencies": {
+    "@infra/rapper": "2.1.13",
+    "@infra/utils": "^1.1.1",
+    "@space/common-components": "^5.1.65",
+    "@space/common-hooks": "^5.1.65",
+    "@space/common-http": "^5.1.65",
+    "@types/enzyme": "^3.10.12",
+    "@types/enzyme-adapter-react-16": "^1.0.6",
+    "@types/jest": "^28.1.1",
+    "ahooks": "^3.3.10",
+    "ansi-to-html": "^0.7.2",
+    "ansi_up": "^5.1.0",
+    "brace": "^0.11.1",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.6",
+    "infrad": "^4.20.0",
+    "isomorphic-fetch": "^2.2.1",
+    "jsonschema": "^1.4.0",
+    "moment-timezone": "^0.5.34",
+    "ramda": "^0.28.0",
+    "react-diff-viewer": "^3.1.1",
+    "react-resize-detector": "^7.1.2",
+    "react-text-loop-next": "^0.0.3",
+    "styled-components": "^5.3.5"
+  }
+}

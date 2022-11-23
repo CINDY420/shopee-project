@@ -1,0 +1,62 @@
+{
+  "name": "@space/ecp-admin",
+  "version": "0.1.0",
+  "description": "shopee.engineering_infra.infra_products.enginfra_fe.space.ecpadmin",
+  "license": "ISC",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "webpack --mode production --env server=live --config webpack.config.js",
+    "dev:mock": "yarn space-dev-cli run --env server=mock",
+    "dev:local": "yarn space-dev-cli run --env server=local",
+    "dev": "yarn space-dev-cli run",
+    "dev:live": "yarn dev --env server=live",
+    "dev:https": "yarn dev --https",
+    "lint": "yarn run lint:js --quiet --fix && yarn run lint:css --fix",
+    "lint:full": "yarn run lint:js --fix && yarn run lint:css --fix",
+    "lint:css": "stylelint **/*.{css,sass,scss} --custom-syntax postcss-scss --allow-empty-input",
+    "lint:js": "eslint --color --ignore-path .eslintignore . --ext .ts,.tsx,.js",
+    "rapper": "rapper --type react --rapperPath \"src/rapper\" --apiUrl \"https://rap.shopee.io/api/repository/get?id=211&token=5dAa7I3MI1AVCwfgGB-PGG1CqhWiUy9A\" --rapUrl \"https://rap.shopee.io\"",
+    "check-type": "tsc --noEmit",
+    "swagger:dev": "cross-env NODE_ENV=dev node swagger-tap.mjs",
+    "swagger:test": "cross-env NODE_ENV=test node swagger-tap.mjs",
+    "swagger:live": "cross-env NODE_ENV=live node swagger-tap.mjs"
+  },
+  "devDependencies": {
+    "@infra/rapper": "^2.1.13",
+    "@space/app-entry": "^5.3.97",
+    "@space/builder": "^5.3.97",
+    "@space/dev-cli": "^1.0.4",
+    "@space/lint": "^2.0.0",
+    "@space/runtime-entry": "^5.3.97",
+    "@tap/core": "^0.4.4",
+    "@types/lodash": "^4.14.182",
+    "@types/react": "^17.0.45",
+    "@types/react-jss": "^10.0.0",
+    "@types/styled-components": "^5.1.25",
+    "cross-env": "^7.0.3",
+    "ts-loader": "^9.3.0",
+    "typescript": "^4.7.3",
+    "zx": "^6.2.4"
+  },
+  "publishConfig": {
+    "registry": "https://npm.shopee.io"
+  },
+  "dependencies": {
+    "@ahooksjs/use-url-state": "^3.5.0",
+    "@infra/utils": "^1.2.0",
+    "@space/common-http": "^5.1.73",
+    "ahooks": "^3.7.0",
+    "infra-design-icons": "^4.7.16",
+    "lodash": "^4.17.21",
+    "moment-timezone": "^0.5.34",
+    "query-string": "^7.1.1",
+    "recoil": "^0.7.3",
+    "styled-components": "^5.3.5",
+    "use-query-params": "^2.0.0",
+    "react": "^17.0.0",
+    "react-dom": "^17.0.0"
+  },
+  "resolutions": {
+    "@types/react": "^17.0.45"
+  }
+}

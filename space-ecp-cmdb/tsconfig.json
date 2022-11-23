@@ -1,0 +1,39 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "src": [
+        "./src"
+      ],
+      "antd": [
+        "node_modules/infrad"
+      ],
+      "antd/*": [
+        "node_modules/infrad/*"
+      ]
+    },
+    "outDir": "./dist/",
+    "lib": [
+      "dom",
+      "es2017"
+    ],
+    "sourceMap": true,
+    "noImplicitAny": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "target": "es2017",
+    "jsx": "react-jsx",
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "skipDefaultLibCheck": true,
+    "skipLibCheck": true
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}

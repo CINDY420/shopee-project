@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "src": ["./src"],
+      "helpers/*": ["./src/helpers/*"]
+    },
+    "outDir": "./dist/",
+    "lib": ["dom", "es2017"],
+    "sourceMap": true,
+    "noImplicitAny": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "skipLibCheck": true,
+    "target": "es2017",
+    "jsx": "react-jsx",
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true
+  },
+  "include": ["src"]
+}

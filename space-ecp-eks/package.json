@@ -1,0 +1,54 @@
+{
+  "name": "@space/ecp-eks",
+  "version": "0.1.0",
+  "description": "shopee.engineering_infra.infra_products.enginfra_fe.space.ecpeks",
+  "license": "ISC",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "webpack --mode production --env server=live --config webpack.config.js",
+    "dev": "yarn space-dev-cli run",
+    "dev:live": "yarn dev --env server=live",
+    "dev:local": "yarn dev --env server=local",
+    "dev:https": "yarn dev --https",
+    "swagger:dev": "cross-env NODE_ENV=dev node swagger-tap.mjs",
+    "swagger:test": "cross-env NODE_ENV=test node swagger-tap.mjs",
+    "swagger:live": "cross-env NODE_ENV=live node swagger-tap.mjs",
+    "lint": "yarn run lint:js --fix && yarn run lint:css --fix",
+    "lint:css": "stylelint **/*.{css,sass,scss} --custom-syntax postcss-scss --allow-empty-input",
+    "lint:js": "eslint --color --ignore-path .eslintignore . --ext .ts,.tsx,.js"
+  },
+  "devDependencies": {
+    "@space/app-entry": "^5.3.72",
+    "@space/builder": "^5.3.72",
+    "@space/dev-cli": "^1.4.0",
+    "@space/lint": "^2.0.0",
+    "@space/runtime-entry": "^5.3.72",
+    "@tap/core": "^0.3.0",
+    "@types/react": "^17.0.0",
+    "@types/react-router-dom": "^5.0.0",
+    "@types/styled-components": "^5.1.25",
+    "antd": "4.21.2",
+    "cross-env": "^7.0.3",
+    "generator-swagger-tap": "^1.0.0-beta.7",
+    "mustache": "^4.2.0",
+    "request": "^2.88.2",
+    "yeoman-generator": "^5.6.1"
+  },
+  "publishConfig": {
+    "registry": "https://npm.shopee.io"
+  },
+  "dependencies": {
+    "@infra/components": "^1.1.1",
+    "@infra/utils": "1.1.2-alpha.2",
+    "@space/common-http": "^5.1.78",
+    "@space/common-utils": "^5.1.80",
+    "ahooks": "^3.6.2",
+    "infra-design-icons": "^4.7.16",
+    "moment-timezone": "^0.5.34",
+    "react-resize-detector": "^7.1.2",
+    "styled-components": "^5.3.5",
+    "use-query-params": "^1.2.3",
+    "react": "^17.0.0",
+    "react-dom": "^17.0.0"
+  }
+}
