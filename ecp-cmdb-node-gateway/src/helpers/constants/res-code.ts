@@ -1,0 +1,10 @@
+export enum ResCode {
+  OK = 0,
+  CUSTOMERROR = -1,
+  VALIDATEERROR = -2,
+  FETCHERROR = -3,
+  AUTHERROR = -4,
+  CMDB_SERVICE_FORBIDDEN = -5,
+  ECP_SERVICE_FORBIDDEN = -6,
+  NOTLOGIN = -99,
+}
