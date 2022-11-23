@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "declaration": true,
+    "lib": ["es5", "es2015", "es2016", "es2017", "dom"],
+    "module": "esnext",
+    "moduleResolution": "node",
+    "noImplicitAny": false,
+    "noUnusedLocals": true,
+    "outDir": "./dist",
+    "preserveConstEnums": true,
+    "removeComments": true,
+    "baseUrl": "src",
+    "rootDirs": ["src"],
+    "jsx": "react",
+    "sourceMap": true,
+    "strictNullChecks": false,
+    "target": "es5",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "importHelpers": true,
+    "noEmit": true,
+    "allowSyntheticDefaultImports": true
+  },
+  "exclude": ["node_modules", "dist", "stories"],
+  "include": ["src/**/*", "typings"]
+}
