@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: $APP_NAME
+  namespace: $NAMESPACE
+  labels:
+    app: $APP_NAME
+    group: Infrastructure-Team
+    project: ksc
+    application: $APP_NAME
+    env: $ENV
+spec:
+  replicas: $REPLICAS
+  revisionHistoryLimit: 1
+  minReadySeconds: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: $APP_NAME
+  template:
+    metadata:
+      labels:
+        app: $APP_NAME
+        group: Infrastructure-Team
+        project: ksc
+        application: $APP_NAME
+        env: $ENV
+    spec:
+      tolerations:
+        - effect: NoSchedule
+          operator: Exists
+      containers:
+        - image: $IMAGE_NAME
+          name: $APP_NAME
+          ports:
+            - containerPort: $POD_PORT
+              name: http
+              protocol: TCP
+          readinessProbe:
+            tcpSocket:
+              port: $POD_PORT
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: $POD_PORT
+            initialDelaySeconds: 5
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: $CPU
+              memory: $MEMORY
+            limits:
+              cpu: $CPU
+              memory: $MEMORY
+          lifecycle:
+            preStop:
+              exec:
+                command: ["sh", "-c", "sleep 3"]
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: $APP_NAME
+  namespace: $NAMESPACE
+  labels:
+    app: $APP_NAME
+spec:
+  ports:
+  - port: $POD_PORT
+    targetPort: $POD_PORT
+    name: web
+  selector:
+    app: $APP_NAME

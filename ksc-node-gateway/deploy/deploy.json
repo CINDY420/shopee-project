@@ -1,0 +1,27 @@
+{
+  "project_dir_depth": 2,
+  "project_name": "[project-name]",
+  "module_name": "[module-name]",
+  "build": {
+    "commands": [],
+    "docker_image": {
+      "base_image": "harbor.shopeemobile.com/shopee/nodejs-base:14",
+      "dependent_libraries_files": [
+        "package.json",
+        "yarn.lock"
+      ],
+      "run_commands": [
+        "yarn global add n",
+        "n latest",
+        "yarn --frozen-lockfile"
+      ]
+    }
+  },
+  "run": {
+    "pre_hook_commands": [
+      "yarn build"
+    ],
+    "command": "yarn start:prod"
+  }
+}
+

@@ -1,0 +1,23 @@
+openApi:
+  protocol: 'https'
+  host: 'bigcompute.infra.test.shopee.io'
+  port: 8080
+  prefix: 'api'
+
+sreTicket:
+  protocol: 'http'
+  host: 'workerorder.test.sz.shopee.io'
+  prefix: 'api'
+  token: 'eyJ0eXAiOiJqd3QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxMjA2LCJ1c2VybmFtZSI6ImJhdGNoX3BsYXRmb3JtX2JvdCIsImV4cCI6MTk1NzkzMzkxMX0.UViK5EAS5EWk8GB90H2JoDuqspxajW4G_WXMQURuUiI'
+
+
+metrics:
+  protocol: 'http'
+  host: 'bigcompute.infra.test.shopee.io'
+  prefix: 'monitor/api'
+  clusterName: 'kube-ksc-sg-sg2-staging'
+
+websocket:
+  protocol: 'https'
+  host: 'bigcompute.infra.test.shopee.io'
+  prefix: 'ws/api'

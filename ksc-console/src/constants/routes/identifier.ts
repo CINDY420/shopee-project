@@ -1,0 +1,5 @@
+export const PROJECT_ID = 'projectId'
+export const TENANT_ID = 'tenantId'
+export const JOB_ID = 'jobId'
+export const CLUSTER_ID = 'clusterId'
+export const PERIODIC_JOB_ID = 'periodicJobId'

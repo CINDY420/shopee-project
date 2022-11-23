@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "declaration": false,
+    "lib": ["esnext", "dom"],
+    "module": "esnext",
+    "moduleResolution": "node",
+    "noImplicitAny": false,
+    "noUnusedLocals": true,
+    "outDir": "./dist",
+    "preserveConstEnums": true,
+    "removeComments": true,
+    "baseUrl": "src",
+    "rootDirs": ["src"],
+    "jsx": "react-jsx",
+    "sourceMap": true,
+    "strictNullChecks": true,
+    "target": "esnext",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "importHelpers": true,
+    "noEmit": true,
+    "allowSyntheticDefaultImports": true,
+    "types": ["node", "vite/client", "jest"]
+  },
+  "exclude": ["node_modules", "dist", "stories"],
+  "include": ["src/**/*", "typings"]
+}

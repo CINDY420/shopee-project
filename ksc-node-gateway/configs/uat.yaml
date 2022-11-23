@@ -1,0 +1,22 @@
+openApi:
+  protocol: 'https'
+  host: 'bigcompute.infra.uat.shopee.io'
+  port: 8080
+  prefix: 'api'
+
+sreTicket:
+  protocol: 'https'
+  host: 'workerorder.sz.shopee.io'
+  prefix: 'api'
+  token: 'eyJ0eXAiOiJqd3QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozOTg5LCJ1c2VybmFtZSI6ImJhdGNoX3BsYXRmb3JtX2JvdCIsImV4cCI6MTk2MTEzMTY4N30.MB5fWT3JNPrW4jxAOnZsztaRTO-lFG_TVvvaWNoMOsQ'
+
+metrics:
+  protocol: 'https'
+  host: 'bigcompute.infra.uat.shopee.io'
+  prefix: 'monitor/api'
+  clusterName: 'kube-ego-sg-sg7-live'
+
+websocket:
+  protocol: 'https'
+  host: 'bigcompute.infra.uat.shopee.io'
+  prefix: 'ws/api'
