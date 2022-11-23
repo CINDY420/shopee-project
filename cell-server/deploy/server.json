@@ -1,0 +1,41 @@
+{
+  "group": "Infrastructure Team",
+  "project_name": "cell",
+  "module_name": "server",
+  "build": {
+    "docker_image": {
+      "base_image": "harbor.shopeemobile.com/shopee/nodejs-base:16",
+      "dependent_libraries_files": [
+        "package.json",
+        "yarn.lock",
+        "tsconfig.build.json",
+        "tsconfig.json",
+        "nest-cli.json"
+      ]
+    },
+    "commands": ["yarn --frozen-lockfile", "yarn build"],
+    "enable_cdn": "false"
+  },
+  "run": {
+    "command": "yarn start",
+    "acquire_prometheus_port": true
+  },
+  "deploy": {
+    "idcs": {
+      "live": {
+        "sg": ["sg1"]
+      }
+    },
+    "resources": {
+      "live": {
+        "cpu": 2,
+        "mem": 2048
+      }
+    },
+    "instances": {
+      "live": {
+        "sg": 1
+      }
+    }
+  }
+}

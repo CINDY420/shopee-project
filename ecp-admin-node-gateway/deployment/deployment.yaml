@@ -1,0 +1,105 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: ecp-admin-node-gateway
+    application: ecp-admin-node-gateway
+    project: ecp
+    group: Infrastructure-Team
+    cid: sg
+    env: $ENV
+    sdu_prefix: ecp-admin
+  name: ecp-admin-node-gateway
+  namespace: $NAMESPACE
+spec:
+  replicas: $REPLICAS
+  selector:
+    matchLabels:
+      app: ecp-admin-node-gateway
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      annotations:
+        prometheus.io/path: /metrics
+        prometheus.io/port: "2022"
+        prometheus.io/scrape: "true"
+      labels:
+        app: ecp-admin-node-gateway
+        application: ecp-admin-node-gateway
+        project: ecp
+        group: Infrastructure-Team
+        cid: sg
+        env: $ENV
+        metrics: "true"
+        sdu_prefix: ecp-admin
+    spec:
+      tolerations:
+        - effect: NoSchedule
+          operator: Exists
+      containers:
+        - image: $IMAGE_NAME
+          name: ecp-admin-node-gateway
+          ports:
+            - containerPort: $POD_PORT
+              name: http
+              protocol: TCP
+            - containerPort: 2022
+              name: metrics
+              protocol: TCP
+          readinessProbe:
+            tcpSocket:
+              port: $POD_PORT
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: $POD_PORT
+            initialDelaySeconds: 5
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: $CPU
+              memory: $MEMORY
+            limits:
+              cpu: $CPU
+              memory: $MEMORY
+          lifecycle:
+            preStop:
+              exec:
+                command: [ "sh", "-c", "sleep 3" ]
+          env:
+            - name: NODE_ENV
+              value: $ENV
+            - name: DEM_KUBE_POD_NAME
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.name
+            - name: SERVICE_NAME
+              value: ecp-admin-$ENV-sg
+            - name: ENV
+              value: $ENV
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: PORT
+              value: "0"
+          volumeMounts:
+            - mountPath: /workspace/log
+              name: log
+            - mountPath: /etc/configs
+              name: ecp-global-config
+      serviceAccountName: default
+      volumes:
+        - name: log
+          hostPath:
+            path: /data/log/ecp-admin-node-gateway-$ENVIRONMENT-sg/log
+            type: DirectoryOrCreate
+        - name: ecp-global-config
+          configMap:
+            name: ecp-global-config

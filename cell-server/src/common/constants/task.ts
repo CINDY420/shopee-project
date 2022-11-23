@@ -1,0 +1,46 @@
+export enum TaskStep {
+  CREATE_SERVICE,
+  CREATE_GIT_REPO,
+  APPLY_RESOURCE,
+  CREATE_FE_WORKBENCH,
+}
+
+export enum CreateServiceStep {
+  CREATE_SERVICE_TICKET,
+  QUERY_SERVICE_TICKET,
+}
+
+export enum CreateGitRepoStep {
+  CREATE_GIT_REPO,
+  BIND_GIT_REPO_TO_SERVICE,
+  INIT_REPO,
+}
+
+export enum ApplyResourcesStep {
+  CREATE_JENKINS_TICKET,
+  QUERY_JENKINS_TICKET,
+  UPDATE_DEPLOY_CONFIG,
+  CREATE_ALB_TEST_TICKET,
+  QUERY_ALB_TEST_TICKET,
+  CREATE_ALB_LIVE_TICKET,
+  QUERY_ALB_LIVE_TICKET,
+}
+
+export enum CreateFEWorkbenchStep {
+  CREATE_FE_WORKBENCH_APP,
+  BIND_JENKINS_FOR_FE_WORKBENCH_APP,
+}
+
+export enum AppSetupProgressStatus {
+  WAITING = 0,
+  CREATING = 1,
+  FINISHED = 2,
+  FAILED = 3,
+}
+
+export enum AppStatus {
+  CREATING = 0,
+  IN_USE = 1,
+  ARCHIVED = 2,
+  CREATING_FAILED = 3,
+}

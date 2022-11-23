@@ -1,0 +1,39 @@
+port: 80
+spaceBaseUrl: 'https://space.shopee.io'
+applicationId: 'd10eb7f707b5d3808ec0031fb7a8f9700824fe660741eebd169c1b8e40ab4d44'
+applicationSecret: '49e5d7ca366587e2ad96623480d05c4500077bfead89254b8dbb59b7d842a4d4'
+gitlabRedirectUrl: 'https://space.shopee.io/console/cell/auth'
+gitlabBaseUrl: 'https://git.garena.com'
+gitlabNamespaceId: '20374'
+serviceNamePrefix: 'shopee.engineering_infra.infra_products.enginfra_fe.cell_bff'
+serviceProductLine: 'shopee.engineering_infra.infra_products'
+cache: {
+  redis: {
+    host: '8f48c24703204c47.redis.cloud.shopee.io',
+    port: 11247,
+  },
+}
+mysql: {
+  type: 'mysql',
+  autoLoadEntities: true,
+  synchronize: false,
+  bigNumberStrings: false,
+  replication: {
+    master: {
+      host: 'db-master-infra-fe-cell-sg1-live.shopeemobile.com',
+      port: 6606,
+      username: 'ecpadmin',
+      password: 'POF4a0cAH_uvzXwk0OVT',
+      database: 'shopee_infra_fe_cell_db',
+    },
+    slaves: [
+      {
+        host: 'db-backendslave-infra-fe-cell-sg1-live.shopeemobile.com',
+        port: 6606,
+        username: 'ecpadmin',
+        password: 'POF4a0cAH_uvzXwk0OVT',
+        database: 'shopee_infra_fe_cell_db',
+      },
+    ],
+  },
+}

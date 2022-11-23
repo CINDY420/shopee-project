@@ -1,0 +1,35 @@
+{
+  "group": "Infrastructure Team",
+  "project_name": "${project_name}",
+  "module_name": "${module_name}",
+  "build": {
+    "docker_image": {
+      "base_image": "harbor.shopeemobile.com/shopee/nodejs-base:16",
+      "dependent_libraries_files": ["package.json", "yarn.lock"]
+        },
+    "commands": ["node -v", "yarn --frozen-lockfile", "yarn build"],
+    "enable_cdn": "false"
+  },
+  "run": {
+    "command": "yarn start:prod",
+    "enable_prometheus": true
+  },
+  "deploy": {
+    "idcs": {
+      "live": {
+        "sg": ["sg1"]
+      }
+    },
+    "resources": {
+      "live": {
+        "cpu": 2,
+        "mem": 2048
+      }
+    },
+    "instances": {
+      "live": {
+        "sg": 1
+      }
+    }
+  }
+}
