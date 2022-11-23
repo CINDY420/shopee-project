@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",                            
+    "forceConsistentCasingInFileNames": true,      
+    "strict": false,                                   
+    "skipLibCheck": true                                
+  }
+}

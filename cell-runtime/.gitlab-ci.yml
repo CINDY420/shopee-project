@@ -1,0 +1,28 @@
+default:
+  image: harbor.shopeemobile.com/shopee-isfe/deploy-nodejs:v16
+
+variables:
+  YARN_CACHE_FOLDER: /etc/ci_cache/yarn_cache
+
+stages:
+  - cr-notify
+  - catch-error
+
+CR:
+  stage: cr-notify
+  only:
+    - merge_requests
+  script:
+    - yarn config set registry https://npm.shopee.io/
+    - yarn global add @infra/code-review-helper
+    - code-review-helper notifyAssignees
+
+mr_error_notify:
+  stage: catch-error
+  rules:
+    - if: $CI_MERGE_REQUEST_IID
+      when: on_failure
+  script:
+    - yarn config set registry https://npm.shopee.io/
+    - yarn global add @jiyao.hong/code-review-helper
+    - code-review-helper pipelineFailureNotification

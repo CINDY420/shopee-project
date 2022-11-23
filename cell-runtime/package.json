@@ -1,0 +1,19 @@
+{
+  "name": "cell-runtime",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "gitlab@git.garena.com:shopee/isfe/DSFE/tech-project/cell-platform/cell-runtime.git",
+  "license": "MIT",
+  "scripts": {
+    "add-ts-node": "yarn global add ts-node",
+    "generate-nestjs": "ts-node ./runtime/compileApp.ts"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.19.0",
+    "@cell/common": "^0.5.3",
+    "@cell/compiler": "^0.5.3",
+    "fs": "^0.0.1-security",
+    "inquirer": "^8.0.0",
+    "typescript": "^4.8.3"
+  }
+}
