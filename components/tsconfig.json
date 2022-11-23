@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "module": "ESNext",
+    "allowSyntheticDefaultImports": true,
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "strictPropertyInitialization": true,
+    "forceConsistentCasingInFileNames": true,
+    "target": "ES5",
+    "lib": ["ESNext", "DOM"],
+    "jsx": "react-jsx",
+    "outDir": "dist",
+    "declaration": true,
+    "declarationDir": "types",
+    "moduleResolution": "node",
+    "emitDeclarationOnly": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    },
+    "plugins": [
+      {
+        "transform": "typescript-transform-paths",
+        "afterDeclarations": true
+      },
+    ]
+  },
+  "include": ["src/**/*"]
+}
